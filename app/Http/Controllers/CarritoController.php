@@ -85,51 +85,55 @@ class CarritoController extends Controller
     }
 
     public function confirmarOrden(Request $request)
-{
-    $carrito = session()->get('carrito', []);
-    $total = 0;
-
-    if (!empty($carrito['productos'])) {
-        foreach ($carrito['productos'] as $producto) {
+    {
+        $carrito = session()->get('carrito', []);
+    
+        // Obtener el ID de la orden de la sesión
+        $ordenId = session()->get('orden');
+    
+        // Calcula el nuevo total de la orden
+        $total = 0;
+        foreach ($carrito['productos'] ?? [] as $producto) {
             $total += $producto['precio'] * $producto['cantidad'];
         }
-    }
-
-    if (!empty($carrito['menus'])) {
-        foreach ($carrito['menus'] as $menu) {
+        foreach ($carrito['menus'] ?? [] as $menu) {
             $total += $menu['precio'] * $menu['cantidad'];
         }
-    }
-
-    $mesa = Mesa::find($request->mesa_id);
-
-    $orden = Orden::create([
-        'estado' => 'Confirmada',
-        'total' => $total,
-        'mesa_id' => 2,
-    ]);
-
-    if (isset($carrito['productos'])) {
-        foreach ($carrito['productos'] as $id => $detalles) {
+    
+        // Buscar la orden en la base de datos por el ID de la sesión
+        $orden = Orden::find($ordenId);
+    
+        // Si no se encuentra la orden, redirigir con un mensaje de error
+        if (!$orden) {
+            return redirect()->back()->with('error', 'No se encontró la orden para confirmar.');
+        }
+    
+        // Actualizar el estado y el total de la orden
+        $orden->estado = 'Pendiente';
+        $orden->total = $total;
+        $orden->save();
+    
+        // Asociar los productos y menús del carrito a la orden
+        $orden->productos()->sync([]);
+        foreach ($carrito['productos'] ?? [] as $id => $detalles) {
             $orden->productos()->attach($id, [
                 'cantidad' => $detalles['cantidad'],
                 'precio' => $detalles['precio'],
             ]);
         }
-    }
-
-    if (isset($carrito['menus'])) {
-        foreach ($carrito['menus'] as $id => $detalles) {
+        $orden->menus()->sync([]);
+        foreach ($carrito['menus'] ?? [] as $id => $detalles) {
             $orden->menus()->attach($id, [
                 'cantidad' => $detalles['cantidad'],
                 'precio' => $detalles['precio'],
             ]);
         }
+    
+        // Limpiar el carrito
+        session()->forget('carrito');
+    
+        return redirect()->route('prodsCombos', $orden->id)->with('success', 'Orden confirmada!');
     }
-
-    session()->forget('carrito');
-    return redirect()->route('ordenes.show', $orden->id)->with('success', 'Orden confirmada!');
-}
 
 
 }

@@ -8,6 +8,49 @@
         const addToCartButtons = document.querySelectorAll('.add-to-cart');
         const popup = document.querySelector('.popup');
         const addMoreButton = document.querySelector('.add-more');
+        const items = document.querySelectorAll('.item');
+        
+
+    items.forEach(item => {
+        const price = parseFloat(item.dataset.price);
+        const quantitySpan = item.querySelector('.prc');
+        const priceSpan = item.querySelector('.price');
+        const plusButton = item.querySelector('.plus');
+        const minusButton = item.querySelector('.minus');
+        const removeButton = item.querySelector('.remove');
+
+        plusButton.addEventListener('click', () => {
+            const quantity = parseInt(quantitySpan.innerText) + 1;
+            quantitySpan.innerText = quantity;
+            const newPrice = price * quantity;
+            priceSpan.innerText = '$' + newPrice.toFixed(2);
+        });
+
+        minusButton.addEventListener('click', () => {
+            const quantity = parseInt(quantitySpan.innerText);
+            if (quantity > 1) {
+                quantitySpan.innerText = quantity - 1;
+                const newPrice = price * (quantity - 1);
+                priceSpan.innerText = '$' + newPrice.toFixed(2);
+            }
+        });
+
+
+        removeButton.addEventListener('click', () => {
+    const itemId = item.dataset.itemId;
+    const itemType = item.dataset.itemType;
+
+    // Eliminar el elemento del carrito
+    if (itemType === 'producto') {
+        delete carrito.productos[itemId];
+    } else if (itemType === 'menu') {
+        delete carrito.menus[itemId];
+    }
+
+    // Eliminar el elemento de la interfaz
+    item.remove();
+});
+    });
 
         addToCartButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -73,42 +116,45 @@
                 <p>Shopping is happy</p>
             </header>
             <div class="cart-items">
-            @if (!empty($carrito['productos']))
-                <h3>Productos</h3>
+                @if (!empty($carrito['productos']))
+                    <h3>Productos</h3>
                     @foreach ($carrito['productos'] as $id => $detalles)
-                        <div class="item">
-                            <img src="{{$detalles['imagen']}}" width="50" alt="Imagen del producto">
-                            <div class="details">
-                                <h2>{{ $detalles['nombre'] }}</h2>
-                                <p>{{ $detalles['cantidad'] }}</p>
-                                <span class="price">${{ number_format($detalles['precio'] * $detalles['cantidad'], 2) }}</span>
-                            </div>
-                            <div class="quantity">
-                                <button class="minus">-</button>
-                                <span>{{ $detalles['cantidad'] }}</span>
-                                <button class="plus">+</button>
-                            </div>
+                    <div class="item" data-price="{{ $detalles['precio'] }}">
+                        <img src="{{$detalles['imagen']}}" width="50" alt="Imagen del producto">
+                        <div class="details">
+                            <h2>{{ $detalles['nombre'] }}</h2>
+                            <p class="prc">{{ $detalles['cantidad'] }}</p>
+                            <span class="price">${{ number_format($detalles['precio'] * $detalles['cantidad'], 2) }}</span>
                         </div>
-                    @endforeach
+                        <div class="quantity">
+                            <button class="minus">-</button>
+                            <span>{{ $detalles['cantidad'] }}</span>
+                            <button class="plus">+</button>
+                            <button class="remove">Quitar</button>
+                        </div>
+                     </div>
+             @endforeach
             @endif
 
             @if (!empty($carrito['menus']))
             <h3>Menús</h3>
-                @foreach ($carrito['menus'] as $id => $detalles)
-                    <div class="item">
-                            <img src="{{$detalles['imagen']}}"  width="50" alt="Imagen del menú">
-                            <div class="details">
-                                <h2>{{ $detalles['nombre'] }}</h2>
-                                <p>{{ $detalles['cantidad'] }}</p>
-                                <span class="price">${{ number_format($detalles['precio'] * $detalles['cantidad'], 2) }}</span>
-                            </div>
-                            <div class="quantity">
-                                <button class="minus">-</button>
-                                <span>{{ $detalles['cantidad'] }}</span>
-                                <button class="plus">+</button>
-                            </div>
-                        </div>
-                @endforeach
+            @foreach ($carrito['menus'] as $id => $detalles)
+    <div class="item" data-price="{{ $detalles['precio'] }}">
+        <img src="{{$detalles['imagen']}}" width="50" alt="Imagen del menú">
+        <div class="details">
+            <h2>{{ $detalles['nombre'] }}</h2>
+            <p class="prc">{{ $detalles['cantidad'] }}</p>
+            <span class="price">${{ number_format($detalles['precio'] * $detalles['cantidad'], 2) }}</span>
+        </div>
+        <div class="quantity">
+            <button class="minus">-</button>
+            <span>{{ $detalles['cantidad'] }}</span>
+            <button class="plus">+</button>
+            
+        </div>
+        <button class="remove">Quitar</button>
+    </div>
+@endforeach
          @endif
 
          <div class="total">
