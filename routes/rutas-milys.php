@@ -20,4 +20,5 @@ use Illuminate\Support\Facades\Route;
 // RUTA DEL DASHBOARD
 Route::get('/dashboard/{id}', [RolController::class, 'index']);
 
-Route::get('form_orden', [EncabezadoOrdenController::class, 'index']);
+Route::get('form_orden/{idMesa}', [EncabezadoOrdenController::class, 'index'])->name('form.index');
+Route::post('guardar_orden/{idMesa}', [EncabezadoOrdenController::class, 'guardarOrden'])->name('form.guardar');

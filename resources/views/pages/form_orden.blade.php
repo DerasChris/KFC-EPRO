@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Orden</title>
     <style>
+        *{
+            font-family: "Open Sans", sans-serif;
+        }
         .profile-pic {
             position: fixed;
             top: 10px;
@@ -63,27 +66,69 @@
             padding: .7rem 1.5rem;
             border-color: #ff0000;
         }
+
+        .fadeout {
+            opacity: 1;
+        }
+        .fading {
+            opacity: 0;
+            transition: opacity 0.1s; 
+        }
+        .fadeout-end {
+            display: none;
+        }
     </style>
 </head>
 <body>
+    <!-- Pantalla de carga -->
+    <div id="fixed" style="display: flex; align-items: center; justify-content:center; width: 100vw; height: 100vh; position: fixed; background: rgba(0,0,0,0.9); z-index: 100;">
+        <h1>Cargando</h1>
+    </div>
+    <!-- Fin Pantalla de carga -->
     <div >
         <img src="https://firebasestorage.googleapis.com/v0/b/pmkfc-52178.appspot.com/o/logo_perfil.png?alt=media&token=1423fcc4-21f0-4375-8970-bd24befdb36e" alt="Foto de perfil" class="profile-pic">
     </div>
     <div class="content">
-        <summary>ORDEN #</summary>
-        <div style="margin-top: 40px">
-            <summary>Su mesa es la #</summary>
-        </div>
-        <div>
-            <label class="label">
-                <input type="text" placeholder="" class="input">
-                <span class="label_name">Ingresa tu nombre</span>
-            </label>
-        </div>
-        <div>
-            <input type="button" class = "btnEmpezar" value="Empezar">
-        </div>
+        <form method="POST" action="{{ route('form.guardar', $idMesa) }}">
+        @csrf
+            <summary>ORDEN #{{ $orden }}</summary>
+            <div style="margin-top: 40px">
+                <summary>Su mesa es la #{{ $idMesa }}</summary>
+            </div>
+            <div>
+                <label class="label">
+                    <input type="text" placeholder="" class="input" name="cliente">
+                    <span class="label_name">Ingresa tu nombre</span>
+                </label>
+            </div>
+            <div>
+                <button type="submit" class = "btnEmpezar">Empezar</button>
+            </div>
+        </form>
     </div>
-    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('pagina cargada');
+            
+            // Seleccionar el elemento con id="fixed"
+            var element = document.getElementById('fixed');  
+
+            // Desvanecerlo
+            fadeOut(element);
+        });
+
+            function fadeOut(element) {
+            element.style.opacity = 1;
+
+            (function fade() {
+                if ((element.style.opacity -= .1) < 0) {
+                element.style.display = 'none';
+                } else {
+                requestAnimationFrame(fade);
+                }
+            })();
+        }
+        
+    </script>
 </body>
 </html>

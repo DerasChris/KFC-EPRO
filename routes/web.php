@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EncabezadoOrdenController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ProductosController;
 use Illuminate\Support\Facades\Route;
@@ -50,3 +51,6 @@ Route::middleware([
 Route::get('/cliente/productos/individuales', [ProductosController::class, 'index'])->name('prodsIndividuales');
 Route::get('/cliente/productos/combos', [MenuController::class, 'index'])->name('prodsCombos');
 
+
+Route::get('form_orden/{idMesa}', [EncabezadoOrdenController::class, 'index'])->name('form.index');
+Route::post('guardar_orden/{idMesa}', [EncabezadoOrdenController::class, 'guardarOrden'])->name('form.guardar');

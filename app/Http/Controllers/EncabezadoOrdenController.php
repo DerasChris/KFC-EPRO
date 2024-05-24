@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\EncabezadoOrden;
+use App\Models\Orden;
 use Illuminate\Http\Request;
 
 class EncabezadoOrdenController extends Controller
@@ -12,10 +13,29 @@ class EncabezadoOrdenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($idMesa)
     {
-        //$orden = EncabezadoOrden::where()->first();
-        return view('pages.form_orden');
+        $orden = Orden::max('id');
+        $orden = $orden+1;
+
+        return view('pages.form_orden', compact('idMesa', 'orden'));
+    }
+
+    public function guardarOrden($idMesa, Request $request)
+    {
+        if($request->isMethod('post')) {
+
+            $nombre = Request()->input("cliente");
+
+            $obj = new Orden();
+            $obj->estado = 0; //guarda estado 0 que es creada :)
+            $obj->mesa_id = $idMesa;
+            $obj->total = 0;
+            $obj->cliente = $nombre;
+            $obj->save();
+        }
+        //luego cambiar este return a la vista de catálogo
+        return redirect()->route('form.index', $idMesa);
     }
 
     /**
