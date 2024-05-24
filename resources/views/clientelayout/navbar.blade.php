@@ -25,7 +25,7 @@
         
         <li class="list active">
             <div class="indicator ovvis"></div>
-            <a href="#">
+            <a href="{{ route('prodsCombos')}}">
                 <span class="icon"> 
                     <img src="{{ asset('images/Group 17.png') }}" alt="">
                 </span>
@@ -35,7 +35,7 @@
         </li>
         <li class="list ">
             <div class="indicator av"></div>
-            <a href="#">
+            <a href="{{ route('carrito.ver')}}">
                 <span class="icon"> 
                     <img src="{{ asset('images/comment.png') }}" alt="">
                 </span>
@@ -69,7 +69,7 @@
     const listItems = document.querySelectorAll('.list');
 
 function activeLink(event) {
-    event.preventDefault(); 
+
 
     
     listItems.forEach((item) => {
@@ -93,5 +93,7 @@ function activeLink(event) {
         item.addEventListener('click', activeLink);
     });
    </script>
+
+   
 </body>
 </html>
