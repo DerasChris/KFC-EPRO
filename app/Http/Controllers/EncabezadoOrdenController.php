@@ -35,7 +35,9 @@ class EncabezadoOrdenController extends Controller
             $obj->save();
         }
         //luego cambiar este return a la vista de catálogo
-        return redirect()->route('form.index', $idMesa);
+        $request->session()->put('idMesa', $idMesa);
+        $request->session()->put('orden',$obj->id);
+        return redirect()->route('prodsIndividuales');
     }
 
     /**
