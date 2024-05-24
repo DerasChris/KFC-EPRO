@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EncabezadoOrdenController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ProductosController;
@@ -51,8 +52,13 @@ Route::middleware([
 Route::get('/cliente/productos/individuales', [ProductosController::class, 'index'])->name('prodsIndividuales');
 Route::get('/cliente/productos/combos', [MenuController::class, 'index'])->name('prodsCombos');
 
+
+Route::get('form_orden/{idMesa}', [EncabezadoOrdenController::class, 'index'])->name('form.index');
+Route::post('guardar_orden/{idMesa}', [EncabezadoOrdenController::class, 'guardarOrden'])->name('form.guardar');
+
 Route::get('/carrito', [CarritoController::class, 'verCarrito'])->name('carrito.ver');
 Route::post('/carrito/producto/{id}', [CarritoController::class, 'agregarProductoAlCarrito'])->name('carrito.agregarProducto');
 Route::post('/carrito/menu/{id}', [CarritoController::class, 'agregarMenuAlCarrito'])->name('carrito.agregarMenu');
 Route::post('/carrito/confirmar', [CarritoController::class, 'confirmarOrden'])->name('carrito.confirmar');
+
 
