@@ -3,8 +3,7 @@
     <div class="sidenav-header">
         <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
             aria-hidden="true" id="iconSidenav"></i>
-        <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/argon-dashboard/pages/dashboard.html "
-            target="_blank">
+        <a class="navbar-brand m-0" href=" {{route('dashboard', ['id' => $rol->idRol]) }} ">
             <img src="https://firebasestorage.googleapis.com/v0/b/pmkfc-52178.appspot.com/o/logo_letras.png?alt=media&token=083361b1-60be-4816-9672-6e3ffad8948b" class="navbar-brand-img h-100" alt="">
             <span class="ms-1 font-weight-bold"></span>
         </a>
@@ -22,18 +21,6 @@
                         <span class="ms-1 font-weight-bold"></span>
                     </div>
                     <span class="nav-link-text ms-1">DASHBOARD</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link " href="../pages/tables.html">
-                    <div
-                        class="border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <img
-                        src="https://firebasestorage.googleapis.com/v0/b/pmkfc-52178.appspot.com/o/KFC%20Chicken.png?alt=media&token=c86de31f-7604-4076-8ec0-2e6176892cae"
-                        class="icon-shape icon-sm" alt="">
-                        <span class="ms-1 font-weight-bold"></span>
-                    </div>
-                    <span class="nav-link-text ms-1">PRODUCTOS</span>
                 </a>
             </li>
             <li class="nav-item">
