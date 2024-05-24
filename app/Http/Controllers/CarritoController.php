@@ -131,4 +131,5 @@ class CarritoController extends Controller
     return redirect()->route('ordenes.show', $orden->id)->with('success', 'Orden confirmada!');
 }
 
+
 }
