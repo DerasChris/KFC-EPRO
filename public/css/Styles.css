@@ -247,3 +247,21 @@ body{
 .navigation ul li:nth-child(5).active~.indicator {
    transform: translateX(460%);
 } */
+
+
+
+.circle-icon {
+    position: relative;
+    top: -20px;
+    width: 24px;
+    height: 24px;
+    background: green;
+    border-radius: 50%;
+    color: white;
+
+}
+
+.cardmod {
+    transition: all 0.1 ease;
+}
+
