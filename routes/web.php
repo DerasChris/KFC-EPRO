@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\ProductosController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolController;
 use Illuminate\Support\Facades\Auth;
@@ -44,4 +46,7 @@ Route::middleware([
 
     Route::get('/dashboard/{id}', [RolController::class, 'index'])->name('d-role');
 });
+
+Route::get('/cliente/productos/individuales', [ProductosController::class, 'index'])->name('prodsIndividuales');
+Route::get('/cliente/productos/combos', [MenuController::class, 'index'])->name('prodsCombos');
 
