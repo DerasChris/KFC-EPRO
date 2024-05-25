@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Orden;
 use App\Models\Rol;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class RolController extends Controller
@@ -16,8 +17,9 @@ class RolController extends Controller
     public function index($id)
     {
         $rol = Rol::findOrFail($id);
-        $card = $this->show($rol);
-        return view('pages.section.options', compact('rol', 'card'));
+        $card = $this->showCard($rol);
+        $ingresos = $this->showIngresos();
+        return view('pages.section.options', compact('rol', 'card', 'ingresos'));
     }
 
     /**
@@ -47,7 +49,7 @@ class RolController extends Controller
      * @param  \App\Models\Rol  $rol
      * @return \Illuminate\Http\Response
      */
-    public function show(Rol $rol)
+    public function showCard(Rol $rol)
     {
         $estadoOrden = Orden::class;
         $card = [
@@ -93,7 +95,7 @@ class RolController extends Controller
                 $card['data'] = [
                     1 => $estadoOrden::where(['estado' => 5])->count(),
                     2 => $estadoOrden::where(['estado' => 4])->count(),
-                    3 => $estadoOrden::where(['estado' => 5])->sum('totalOrden'),
+                    3 => $estadoOrden::where(['estado' => 5])->sum('total'),
                 ];
                 $card['img'] = [
                     1 => 'https://firebasestorage.googleapis.com/v0/b/pmkfc-52178.appspot.com/o/buena-resena.png?alt=media&token=1b2d8957-523a-4d0f-a515-b90892395bfa',
@@ -103,6 +105,33 @@ class RolController extends Controller
                 break;
         }
         return $card;
+    }
+
+    public function showIngresos()
+    {
+        $totalesPorFecha = Orden::select(DB::raw('DATE(created_at) as fecha'), DB::raw('COUNT(*) as cantidad'), DB::raw('SUM(total) as suma_total'))
+            ->where('estado', 'Entregada')
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->get();
+        $filasHTML = '';
+        foreach ($totalesPorFecha as $total) {
+            $fecha = date('d-M-Y', strtotime($total->fecha));
+            $cantidad = $total->cantidad;
+            $sumaTotal = $total->suma_total;
+            $urlPDF = route('generarPDF',$total->fecha);
+
+            $filasHTML .= "<tr>
+                <td>{$fecha}</td>
+                <td>{$cantidad}</td>
+                <td>{$sumaTotal}</td>
+                <td>
+                    <a href='{$urlPDF}'>
+                        <img src='https://firebasestorage.googleapis.com/v0/b/pmkfc-52178.appspot.com/o/imprimir.png?alt=media&token=5ad2f0cd-8ff4-4bda-a167-f7f3230d6992' class='icon icon-shape'>
+                    </a>
+                </td>
+            </tr>";
+        }
+        return $filasHTML;
     }
 
     /**
