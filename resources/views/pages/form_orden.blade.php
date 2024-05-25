@@ -70,6 +70,11 @@
         #fixed {
             top: 0;
             left: 0;
+            flex-direction: column;
+            font-family: 'Brush Script MT', cursive;
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
         }
         .fadeout {
             opacity: 1;
@@ -81,12 +86,14 @@
         .fadeout-end {
             display: none;
         }
+
     </style>
 </head>
 <body>
     <!-- Pantalla de carga -->
     <div id="fixed" class = "pan-carga" style="display: flex; align-items: center; justify-content:center; width: 100vw; height: 100vh; position: fixed; background: rgba(243, 68, 81, 0.9); z-index: 100;">
-        <h1 style="font-family: Copperplate;">PM KFC</h1>
+        <h1>PM KFC</h1>
+        <img src="http://localhost:8085/KFC-EPRO/public/images/cafe.gif" alt="Pantalla de Carga" style="width: 5rem;">
     </div>
     <!-- Fin Pantalla de carga -->
     <div >
