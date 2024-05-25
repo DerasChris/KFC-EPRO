@@ -24,7 +24,6 @@ class EncabezadoOrdenController extends Controller
     public function guardarOrden($idMesa, Request $request)
     {
         if($request->isMethod('post')) {
-
             $nombre = Request()->input("cliente");
 
             $obj = new Orden();
