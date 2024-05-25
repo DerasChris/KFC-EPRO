@@ -39,7 +39,7 @@
         }
         .label_name{
             grid-area: input;
-            z-index: 100;
+            z-index: 50;
             width: max-content;
             margin-left: 1rem;
             padding: 0 .5rem;
@@ -67,6 +67,15 @@
             border-color: #ff0000;
         }
 
+        #fixed {
+            top: 0;
+            left: 0;
+            flex-direction: column;
+            font-family: 'Brush Script MT', cursive;
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+        }
         .fadeout {
             opacity: 1;
         }
@@ -77,12 +86,14 @@
         .fadeout-end {
             display: none;
         }
+
     </style>
 </head>
 <body>
     <!-- Pantalla de carga -->
-    <div id="fixed" style="display: flex; align-items: center; justify-content:center; width: 100vw; height: 100vh; position: fixed; background: rgba(0,0,0,0.9); z-index: 100;">
-        <h1>Cargando</h1>
+    <div id="fixed" class = "pan-carga" style="display: flex; align-items: center; justify-content:center; width: 100vw; height: 100vh; position: fixed; background: rgba(243, 68, 81, 0.9); z-index: 100;">
+        <h1>PM KFC</h1>
+        <img src="http://localhost:8085/KFC-EPRO/public/images/cafe.gif" alt="Pantalla de Carga" style="width: 5rem;">
     </div>
     <!-- Fin Pantalla de carga -->
     <div >
@@ -113,11 +124,13 @@
             // Seleccionar el elemento con id="fixed"
             var element = document.getElementById('fixed');  
 
-            // Desvanecerlo
-            fadeOut(element);
+            element.style.display = 'flex';
+            setTimeout(() => {
+                fadeOut(element);
+            }, 500);
         });
 
-            function fadeOut(element) {
+        function fadeOut(element) {
             element.style.opacity = 1;
 
             (function fade() {
