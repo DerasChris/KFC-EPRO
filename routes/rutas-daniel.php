@@ -20,4 +20,4 @@ use Illuminate\Support\Facades\Route;
 
 //Route::view('/carrito_orden', 'carrito_orden');
 
-Route::get('/carrito_orden', [CarritoController::class, 'index']);
+Route::get('/carrito_orden', [CarritoController::class, 'index'])->name('carrito');
