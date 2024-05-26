@@ -44,7 +44,7 @@ class PDFController extends Controller
                 </tr>";
         }
         $filasHTML .= "
-            <tr colspan=3>
+            <tr colspan='3'>
                 <td>Total de Ingresos Estimados</td>
                 <td>{$total}</td>
             </tr>
