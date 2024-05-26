@@ -24,10 +24,12 @@ class PDFController extends Controller
         ->where('ordens.estado', 'Entregada')
         ->whereDate('ordens.created_at', $fecha)
         ->get();
+        $total = 0;
         // Imprimir el resultado para depuración
         //dd($arrVenta);
         $filasHTML = '';
         foreach ($arrVenta as $venta) {
+            $total += $venta->total;
             $no =  $venta->id;
             $cantidad =  $venta->cantidad;
             $precio =  $venta->precio;
@@ -41,6 +43,12 @@ class PDFController extends Controller
                     <td>{$total}</td>
                 </tr>";
         }
+        $filasHTML .= "
+            <tr colspan=3>
+                <td>Total de Ingresos Estimados</td>
+                <td>{$total}</td>
+            </tr>
+        ";
         $data = [
             'title' => 'DETALLE DE INGRESOS ESTIMADOS',
             'fecha' => date('F j, Y', strtotime($fecha)),
