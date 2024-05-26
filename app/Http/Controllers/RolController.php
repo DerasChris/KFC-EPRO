@@ -64,8 +64,8 @@ class RolController extends Controller
                     2 => 'ORDENES EN ESPERA',
                 ];
                 $card['data'] = [
-                    1 => $estadoOrden::where(['estado' => 2])->count(),
-                    2 => $estadoOrden::where(['estado' => 1])->count(),
+                    1 => $estadoOrden::where(['estado' => "En proceso"])->count(),
+                    2 => $estadoOrden::where(['estado' => "Pendiente"])->count(),
                 ];
                 $card['img'] = [
                     1 => 'https://firebasestorage.googleapis.com/v0/b/pmkfc-52178.appspot.com/o/entrega-rapida.png?alt=media&token=d4b98dea-eee1-43cc-bd43-9179e016a70b',
@@ -78,8 +78,8 @@ class RolController extends Controller
                     2 => 'ORDENES ENTREGADAS',
                 ];
                 $card['data'] = [
-                    1 => $estadoOrden::where(['estado' => 3])->count(),
-                    2 => $estadoOrden::where(['estado' => 5])->count(),
+                    1 => $estadoOrden::where(['estado' => "Completada"])->count(),
+                    2 => $estadoOrden::where(['estado' => "Entregada"])->count(),
                 ];
                 $card['img'] = [
                     1 => 'https://firebasestorage.googleapis.com/v0/b/pmkfc-52178.appspot.com/o/hora.png?alt=media&token=bb2af20b-0c77-43a1-92f9-84d1b20a6d44',
@@ -93,9 +93,9 @@ class RolController extends Controller
                     3 => 'INGRESOS ESTIMADOS',
                 ];
                 $card['data'] = [
-                    1 => $estadoOrden::where(['estado' => 5])->count(),
-                    2 => $estadoOrden::where(['estado' => 4])->count(),
-                    3 => $estadoOrden::where(['estado' => 5])->sum('total'),
+                    1 => $estadoOrden::where(['estado' => "Entregada"])->count(),
+                    2 => $estadoOrden::where(['estado' => "Cancelada"])->count(),
+                    3 => $estadoOrden::where(['estado' => "Entregada"])->sum('total'),
                 ];
                 $card['img'] = [
                     1 => 'https://firebasestorage.googleapis.com/v0/b/pmkfc-52178.appspot.com/o/buena-resena.png?alt=media&token=1b2d8957-523a-4d0f-a515-b90892395bfa',
