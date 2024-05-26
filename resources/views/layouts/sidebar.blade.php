@@ -12,7 +12,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link active" href="../pages/dashboard.html">
+                <a class="nav-link active" href="{{route('dashboard', ['id' => $rol->idRol])}}">
                     <div
                         class="border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <img
@@ -24,7 +24,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link " href="../pages/billing.html">
+                <a class="nav-link" id="btn-ingresos">
                     <div class="border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <img src="https://firebasestorage.googleapis.com/v0/b/pmkfc-52178.appspot.com/o/Money%20Bag.png?alt=media&token=06af1c06-af6a-4915-8d7c-fb633c552b86"
                             class="icon-shape icon-sm" alt="">
@@ -45,4 +45,6 @@
                     <span class="nav-link-text ms-1">Profile</span>
                 </a>
             </li>
+        </ul>
+    </div>
 </aside>
