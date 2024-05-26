@@ -125,7 +125,7 @@ class RolController extends Controller
                 <td>{$cantidad}</td>
                 <td>{$sumaTotal}</td>
                 <td>
-                    <a href='{$urlPDF}'>
+                    <a href='{$urlPDF}' target='_blank'>
                         <img src='https://firebasestorage.googleapis.com/v0/b/pmkfc-52178.appspot.com/o/imprimir.png?alt=media&token=5ad2f0cd-8ff4-4bda-a167-f7f3230d6992' class='icon icon-shape'>
                     </a>
                 </td>
