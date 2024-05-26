@@ -132,7 +132,7 @@ class CarritoController extends Controller
         // Limpiar el carrito
         session()->forget('carrito');
     
-        return redirect()->route('prodsCombos', $orden->id)->with('success', 'Orden confirmada!');
+        return redirect()->route('carrito.ver', $orden->id)->with('success', 'Orden confirmada!');
     }
 
 

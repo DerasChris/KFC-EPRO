@@ -2,6 +2,9 @@
 
 @section('contenedor')
 <link rel="stylesheet" href="{{ asset('css/carrito.css') }}">
+<styles>
+    
+</styles>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -52,15 +55,7 @@
 });
     });
 
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                popup.style.display = 'flex';
-            });
-        });
-
-        addMoreButton.addEventListener('click', () => {
-            popup.style.display = 'none';
-        });
+        
 
         const plusButtons = document.querySelectorAll('.plus');
         const minusButtons = document.querySelectorAll('.minus');
@@ -130,11 +125,12 @@
                             <button class="minus">-</button>
                             <span>{{ $detalles['cantidad'] }}</span>
                             <button class="plus">+</button>
-                            <button class="remove">Quitar</button>
                         </div>
                      </div>
-             @endforeach
-            @endif
+                
+                    @endforeach
+                   
+             @endif
 
             @if (!empty($carrito['menus']))
             <h3>Menús</h3>
@@ -152,31 +148,39 @@
             <button class="plus">+</button>
             
         </div>
-        <button class="remove">Quitar</button>
     </div>
 @endforeach
          @endif
 
-         <div class="total">
-            <h3>Total: ${{ number_format(isset($carrito['total']) ? $carrito['total'] : 0, 2) }}</h3>
-        </div>
+        @if (!empty($carrito['productos']) || !empty($carrito['menus']) )
+            <div class="total">
+                <h3>Total: ${{ number_format(isset($carrito['total']) ? $carrito['total'] : 0, 2) }}</h3>
+            </div>
 
-         <form action="{{ route('carrito.confirmar') }}" method="POST">
-            @csrf
-            <button type="submit" class="add-to-cart">Confirmar Orden</button>
-        </form>
+            <form action="{{ route('carrito.confirmar') }}" method="POST">
+                @csrf
+                <button type="submit" class="add-to-cart">Confirmar Orden</button>
+            </form>
+        @else
+                    <div class="container d-flex justify-content-center align-items-center flex-column">
+                        <h2> No hay ordenes aún</h2>
+                        <img src="{{ asset('images/sanders.png')}}" alt="" width="350" class="rounded-circle mt-5">
+                    </div>
+        
+        @endif
                
         </div>
 
-        <div class="popup">
-            <div class="popup-content">
-                <span class="checkmark">✔</span>
-                <h2>Producto añadido!</h2>
-                <p>Orden asignada correctamente</p>
-                <button class="add-more">Añadir más productos</button>
+        @if(!empty(session()->get('success')))
+            <div class="popup">
+                <div class="popup-content">
+                    <span class="checkmark">✔</span>
+                    <h2>Orden confirmada!</h2>
+                    <p>Orden asignada correctamente</p>
+                    <button class="add-more">Añadir más productos</button>
+                </div>
             </div>
-        </div>
-
+        @endif
         <!-- Detalle del Producto -->
         <!-- <div class="product-detail">
             <header>

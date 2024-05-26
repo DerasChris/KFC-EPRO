@@ -1,16 +1,8 @@
+
 <div class="navigation">
     <hr class="bg-primary">
     <ul>
-        <li class="list  vis">
-            <div class="indicator av"></div>
-            <a href="#">
-                <span class="icon" id="elemento1"> 
-                    <img src="{{ asset('images/home.png') }}" alt="">
-                </span>
-                <span class="text">Home</span>
-                <span class="circle"></span>
-            </a>
-        </li>
+       
         
         <li class="list vis">
             <div class="indicator av"></div>
@@ -43,16 +35,7 @@
                 <span class="circle"></span>
             </a>
         </li>
-        <li class="list vis">
-            <div class="indicator av"></div>
-            <a href="#">
-                <span class="icon"> 
-                    <img src="{{ asset('images/heart.png') }}" alt="">
-                </span>
-                <span class="text">Fav</span>
-                <span class="circle"></span>
-            </a>
-        </li>
+       
         
     </ul>
    </div>

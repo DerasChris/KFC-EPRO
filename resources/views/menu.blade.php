@@ -1,6 +1,7 @@
 @extends('clientelayout.header')
-
+<link rel="stylesheet" href="{{ asset('css/carrito.css') }}">
 @section('contenedor')
+
     <div class="row d-flex flex-row flex-wrap justify-content-around p-3">
         @foreach ($menus as $menu)
             <div class="col-5 d-flex justify-content-center cardmod p-2 m-3" id="card_{{ $menu->id }}">
