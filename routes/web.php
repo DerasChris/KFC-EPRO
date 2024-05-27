@@ -3,6 +3,7 @@
 use App\Http\Controllers\EncabezadoOrdenController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ProductosController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolController;
@@ -60,5 +61,10 @@ Route::get('/carrito', [CarritoController::class, 'verCarrito'])->name('carrito.
 Route::post('/carrito/producto/{id}', [CarritoController::class, 'agregarProductoAlCarrito'])->name('carrito.agregarProducto');
 Route::post('/carrito/menu/{id}', [CarritoController::class, 'agregarMenuAlCarrito'])->name('carrito.agregarMenu');
 Route::post('/carrito/confirmar', [CarritoController::class, 'confirmarOrden'])->name('carrito.confirmar');
+Route::delete('/carrito/producto/{id}', [CarritoController::class, 'eliminar'])->name('carrito.eliminarProd');
+Route::delete('/carrito/menu/{id}', [CarritoController::class, 'eliminarMenu'])->name('carrito.eliminarMenu');
 
 
+
+$data = [];
+Route::get('/generate-pdf/{fecha}', [PDFController::class, 'generatePDF'])->name('generarPDF');

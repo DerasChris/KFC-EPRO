@@ -2,9 +2,7 @@
 
 @section('contenedor')
 <link rel="stylesheet" href="{{ asset('css/carrito.css') }}">
-<styles>
-    
-</styles>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -39,20 +37,6 @@
         });
 
 
-        removeButton.addEventListener('click', () => {
-    const itemId = item.dataset.itemId;
-    const itemType = item.dataset.itemType;
-
-    // Eliminar el elemento del carrito
-    if (itemType === 'producto') {
-        delete carrito.productos[itemId];
-    } else if (itemType === 'menu') {
-        delete carrito.menus[itemId];
-    }
-
-    // Eliminar el elemento de la interfaz
-    item.remove();
-});
     });
 
         
@@ -86,11 +70,7 @@
             cart.style.display = 'block';
         });
 
-        addToOrderButton.addEventListener('click', () => {
-            productDetail.style.display = 'none';
-            cart.style.display = 'block';
-            alert('Producto agregado a la orden');
-        });
+
 
         const cartItems = document.querySelectorAll('.item');
         cartItems.forEach(item => {
@@ -125,8 +105,15 @@
                             <button class="minus">-</button>
                             <span>{{ $detalles['cantidad'] }}</span>
                             <button class="plus">+</button>
+
                         </div>
+                        <form action="{{ route('carrito.eliminarProd', $id) }}" method="POST" class="m-2">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
                      </div>
+                     
                 
                     @endforeach
                    
@@ -148,6 +135,11 @@
             <button class="plus">+</button>
             
         </div>
+        <form action="{{ route('carrito.eliminarMenu', $id) }}" method="POST" class="m-2">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
     </div>
 @endforeach
          @endif
@@ -181,36 +173,17 @@
                 </div>
             </div>
         @endif
-        <!-- Detalle del Producto -->
-        <!-- <div class="product-detail">
-            <header>
-                <button class="back">&larr;</button>
-                <h1>Wow Combo</h1>
-                <p>4.9 • 26 mins</p>
-            </header>
-          
-            <p>Delicioso combo de pollo con papas y soda a lo coronel Sanders</p>
-            <div class="combo-details">
-                <div class="combo-item">
-                    <img src="pollo.jpg" alt="Piernas">
-                    <button class="change">Cambiar</button>
-                </div>
-                <div class="combo-item">
-                    <img src="papas.jpg" alt="Papas Fritas">
-                    <button class="change">Cambiar</button>
-                </div>
-                <div class="combo-item">
-                    <img src="pepsi.jpg" alt="Pepsi 375 ML">
-                    <button class="change">Cambiar</button>
+
+        @if(!empty(session()->get('Deleted')))
+            <div class="popup">
+                <div class="popup-content">
+                    <span class="checkmark">✔</span>
+                    <h2>Item eliminado!</h2>
+                    <p>Puedes seleccionar otro producto</p>
+                    <button class="add-more">Añadir más productos</button>
                 </div>
             </div>
-            <div class="order-quantity">
-                <button class="minus">-</button>
-                <span>1</span>
-                <button class="plus">+</button>
-            </div>
-            <button class="add-to-order">$13.99 Agregar a Orden</button>
-        </div> -->
+        @endif
     </div>
 @endsection
 

@@ -135,5 +135,40 @@ class CarritoController extends Controller
         return redirect()->route('carrito.ver', $orden->id)->with('success', 'Orden confirmada!');
     }
 
+    public function eliminar($id)
+    {
+        // Obtener el carrito de la sesión
+        $carrito = Session::get('carrito', []);
+
+        // Verificar si el producto existe en el carrito
+        if (isset($carrito['productos'][$id])) {
+            // Eliminar el producto del carrito
+            unset($carrito['productos'][$id]);
+
+            // Actualizar el carrito en la sesión
+            Session::put('carrito', $carrito);
+        }
+
+        // Redirigir de vuelta al carrito
+        return redirect()->back()->with('Deleted', 'Producto eliminado del carrito');
+    }
+
+    public function eliminarMenu($id)
+    {
+        // Obtener el carrito de la sesión
+        $carrito = Session::get('carrito', []);
+
+        // Verificar si el producto existe en el carrito
+        if (isset($carrito['menus'][$id])) {
+            // Eliminar el producto del carrito
+            unset($carrito['menus'][$id]);
+
+            // Actualizar el carrito en la sesión
+            Session::put('carrito', $carrito);
+        }
+
+        // Redirigir de vuelta al carrito
+        return redirect()->back()->with('Deleted', 'Producto eliminado del carrito');
+    }
 
 }

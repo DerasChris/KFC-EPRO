@@ -23,7 +23,7 @@
                     </div>
                     <form method="POST" action="{{ route('carrito.agregarMenu', ['id' => $menu->id]) }}">
                         @csrf
-                        <button class="btn btn-primary mt-2 order-button" style="visibility:hidden;">Ordenar</button>
+                        <button class="btn btn-danger mt-2 order-button w-100" style="visibility:hidden;">Ordenar</button>
 
                     </form>
 

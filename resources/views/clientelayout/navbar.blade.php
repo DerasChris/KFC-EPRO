@@ -4,7 +4,7 @@
     <ul>
        
         
-        <li class="list vis">
+        <li class="list ">
             <div class="indicator av"></div>
             <a href="#">
                 <span class="icon" id="elemento2"> 
@@ -15,8 +15,8 @@
             </a>
         </li>
         
-        <li class="list active">
-            <div class="indicator ovvis"></div>
+        <li class="list {{ request()->routeIs('prodsIndividuales') || request()->routeIs('prodsCombos') ? 'active' : ' ' }}">
+            <div class="indicator {{ request()->routeIs('prodsIndividuales') || request()->routeIs('prodsCombos') ? 'ovvis' : ' av' }}"></div>
             <a href="{{ route('prodsCombos')}}">
                 <span class="icon"> 
                     <img src="{{ asset('images/Group 17.png') }}" alt="">
@@ -25,8 +25,8 @@
                 <span class="circle"></span>
             </a>
         </li>
-        <li class="list ">
-            <div class="indicator av"></div>
+        <li class="list {{ request()->routeIs('carrito.ver') ? 'active' : ' ' }}">
+            <div class="indicator {{ request()->routeIs('carrito.ver') ? 'ovvis' : ' av' }}"></div>
             <a href="{{ route('carrito.ver')}}">
                 <span class="icon"> 
                     <img src="{{ asset('images/comment.png') }}" alt="">
@@ -48,34 +48,7 @@
         loader.style.display = "none";
     });
     </script>
-   <script>
-    const listItems = document.querySelectorAll('.list');
-
-function activeLink(event) {
-
-
-    
-    listItems.forEach((item) => {
-        item.classList.remove('active');
-        item.querySelector('.indicator').classList.add('av');
-        item.querySelector('.indicator').classList.remove('ovvis');
-    });
-    
-    
-    this.classList.add('active');
-    const indicator = this.querySelector('.indicator');
-    indicator.classList.remove('av');
-    
    
-        indicator.addEventListener('transitionend', function() {
-            indicator.classList.add('ovvis');
-        }, { once: true });
-    }
-
-    listItems.forEach((item) => {
-        item.addEventListener('click', activeLink);
-    });
-   </script>
 
    
 </body>
