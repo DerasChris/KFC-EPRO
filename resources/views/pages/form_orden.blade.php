@@ -60,7 +60,7 @@
             border-color: red; /* Color del borde rojo */
         }
         .btnEmpezar{
-            background-color: red;
+            background-color: #ef2a39;
             color: white;
             border-radius: 10px;
             padding: .7rem 1.5rem;
@@ -93,7 +93,7 @@
     <!-- Pantalla de carga -->
     <div id="fixed" class = "pan-carga" style="display: flex; align-items: center; justify-content:center; width: 100vw; height: 100vh; position: fixed; background: rgba(243, 68, 81, 0.9); z-index: 100;">
         <h1>PM KFC</h1>
-        <img src="http://localhost:8085/KFC-EPRO/public/images/cafe.gif" alt="Pantalla de Carga" style="width: 5rem;">
+        <img src="{{ asset('images/cafe.gif') }}" style="width: 5rem;">
     </div>
     <!-- Fin Pantalla de carga -->
     <div >
@@ -109,7 +109,7 @@
             <div>
                 <label class="label">
                     <input type="text" placeholder="" class="input" name="cliente">
-                    <span class="label_name">Ingresa tu nombre</span>
+                    <span class="label_name">Ingresa tu nombre y apellido</span>
                 </label>
             </div>
             <div>

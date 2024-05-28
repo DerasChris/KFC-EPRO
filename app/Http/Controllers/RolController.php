@@ -19,7 +19,32 @@ class RolController extends Controller
         $rol = Rol::findOrFail($id);
         $card = $this->showCard($rol);
         $ingresos = $this->showIngresos();
-        return view('pages.section.options', compact('rol', 'card', 'ingresos'));
+
+        if($id == 1){
+            $estados = ['Pendiente', 'En Proceso'];
+            $ordenes_detalle = DB::table('ordenes_detalle')
+            ->leftJoin('ordens', 'ordenes_detalle.orden_id', '=', 'ordens.id')
+            ->select('ordenes_detalle.*', 'ordens.estado AS estado_orden')
+            ->whereIn('ordens.estado', $estados)
+            ->orderBy('estado_orden')
+            ->get();
+        }else if($id == 2){
+            $estados = ['Completada'];
+            $ordenes_detalle = DB::table('ordenes_detalle')
+            ->leftJoin('ordens', 'ordenes_detalle.orden_id', '=', 'ordens.id')
+            ->select('ordenes_detalle.*', 'ordens.estado AS estado_orden')
+            ->whereIn('ordens.estado', $estados)
+            ->orderBy('estado_orden')
+            ->get();
+        }else{
+            $ordenes_detalle = DB::table('ordenes_detalle')
+            ->leftJoin('ordens', 'ordenes_detalle.orden_id', '=', 'ordens.id')
+            ->select('ordenes_detalle.*', 'ordens.estado AS estado_orden')
+            ->orderBy('estado_orden')
+            ->get();
+        }
+
+        return view('pages.section.options', compact('rol', 'card', 'ingresos', 'ordenes_detalle'));
     }
 
     /**
@@ -155,6 +180,44 @@ class RolController extends Controller
     public function update(Request $request, Rol $rol)
     {
         //
+    }
+    public function updateOrdenEstadoJefe(Request $request)
+    {
+        $ordenId = $request->input('orden_id');
+        $estado = $request->input('estado');
+        $idrol = $request->input('rol');
+
+        $rol = Rol::findOrFail($idrol);
+
+        $orden = Orden::where('id', $ordenId)->first();
+
+        if($estado == 'Pendiente')
+            $orden->estado = 'En Proceso';
+        else if($estado == 'En Proceso')
+            $orden->estado = 'Completada';
+        $orden->save();
+
+        // Redireccionar a la vista o realizar otra acción
+        return redirect()->route('dashboard', ['rol' => $rol]);;
+    }
+
+    public function updateOrdenEstadoCaja(Request $request)
+    {
+        $ordenId = $request->input('ordenid_cj');
+        $boton = $request->input('estadocj');
+        $idrol = $request->input('rolcj');
+
+        $rol = Rol::findOrFail($idrol);
+
+        $orden = Orden::where('id', $ordenId)->first();
+
+        if($boton == 'Entregada')
+            $orden->estado = 'Entregada';
+        else if($boton == 'NoRetirado')
+            $orden->estado = 'No Retirado';
+        $orden->save();
+
+        return redirect()->route('dashboard', ['rol' => $rol]);;
     }
 
     /**

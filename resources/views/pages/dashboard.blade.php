@@ -13,7 +13,7 @@
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <!-- CSS Files -->
-    <link id="pagestyle" href="{{ asset('css/dashboard/dashboard.css')}}?v=2.0.4" rel="stylesheet" />
+    <link id="pagestyle" href="{{ asset('css/dashboard/dashboard.css')}}" rel="stylesheet" />
     <!-- ESTILOS GENERALES -->
     @include('layouts.adicionales')
 </head>
@@ -120,16 +120,23 @@
             </div>
 
             <div class="row mt-4" id="dashboard">
-                <div class="col-lg-7 mb-lg-0 mb-4">
-                    @switch($rol->idRol)
-                    @case(1)
-                    @yield('table-jefeCocina')
-                    @break
-                    @case(4)
-                    @yield('calendar')
-                    @break
-                    @endswitch
-                </div>
+                @switch($rol->idRol)
+                @case(1)
+                    <div class="col-lg-12 mb-lg-0 mb-4">
+                        @yield('table-jefeCocina')
+                    </div>
+                @break
+                @case(2)
+                    <div class="col-lg-12 mb-lg-0 mb-4">
+                        @yield('table-cajero')
+                    </div>
+                @break
+                @case(4)
+                    <div class="col-lg-12 mb-lg-0 mb-4">
+                        @yield('calendar')
+                    </div>
+                @break
+                @endswitch
             </div>
 
             <div class="row mt-4" id="ingresos" style="display: none;">
