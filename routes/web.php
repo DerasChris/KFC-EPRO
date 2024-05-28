@@ -53,6 +53,9 @@ Route::middleware([
 Route::get('/cliente/productos/individuales', [ProductosController::class, 'index'])->name('prodsIndividuales');
 Route::get('/cliente/productos/combos', [MenuController::class, 'index'])->name('prodsCombos');
 
+Route::post('orden/jefe/{estado?}', [RolController::class, 'updateOrdenEstadoJefe'])->name('updateOrdenJefe.index');
+
+Route::post('orden/caja/{estado?}', [RolController::class, 'updateOrdenEstadoCaja'])->name('updateOrdenCaja.index');
 
 Route::get('form_orden/{idMesa}', [EncabezadoOrdenController::class, 'index'])->name('form.index');
 Route::post('guardar_orden/{idMesa}', [EncabezadoOrdenController::class, 'guardarOrden'])->name('form.guardar');

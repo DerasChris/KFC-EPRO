@@ -20853,12 +20853,12 @@ fieldset:disabled .btn {
 }
 
 .card .card-header {
-  padding: 1.5rem;
+  padding: 1rem 1.5rem 0;
 }
 
 .card .card-body {
   font-family: "Open Sans", sans-serif;
-  padding: 1.5rem;
+  padding: 0 1.5rem;
 }
 
 .card.card-plain {
@@ -20867,7 +20867,7 @@ fieldset:disabled .btn {
 }
 
 .card .card-footer {
-  padding: 1.5rem;
+  padding: 0.5rem 1.5rem 0;
   background-color: transparent;
 }
 
@@ -24602,9 +24602,7 @@ hr.horizontal.gray-light {
   vertical-align: middle;
 }
 
-.table tbody tr:last-child td {
-  border-width: 0;
-}
+
 
 .table> :not(:last-child)> :last-child>* {
   border-bottom-color: #e9ecef;
