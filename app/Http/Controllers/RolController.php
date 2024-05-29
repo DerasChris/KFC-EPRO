@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Orden;
 use App\Models\Rol;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class RolController extends Controller
@@ -16,8 +17,34 @@ class RolController extends Controller
     public function index($id)
     {
         $rol = Rol::findOrFail($id);
-        $card = $this->show($rol);
-        return view('pages.section.options', compact('rol', 'card'));
+        $card = $this->showCard($rol);
+        $ingresos = $this->showIngresos();
+
+        if($id == 1){
+            $estados = ['Pendiente', 'En Proceso'];
+            $ordenes_detalle = DB::table('ordenes_detalle')
+            ->leftJoin('ordens', 'ordenes_detalle.orden_id', '=', 'ordens.id')
+            ->select('ordenes_detalle.*', 'ordens.estado AS estado_orden')
+            ->whereIn('ordens.estado', $estados)
+            ->orderBy('estado_orden')
+            ->get();
+        }else if($id == 2){
+            $estados = ['Completada'];
+            $ordenes_detalle = DB::table('ordenes_detalle')
+            ->leftJoin('ordens', 'ordenes_detalle.orden_id', '=', 'ordens.id')
+            ->select('ordenes_detalle.*', 'ordens.estado AS estado_orden')
+            ->whereIn('ordens.estado', $estados)
+            ->orderBy('estado_orden')
+            ->get();
+        }else{
+            $ordenes_detalle = DB::table('ordenes_detalle')
+            ->leftJoin('ordens', 'ordenes_detalle.orden_id', '=', 'ordens.id')
+            ->select('ordenes_detalle.*', 'ordens.estado AS estado_orden')
+            ->orderBy('estado_orden')
+            ->get();
+        }
+
+        return view('pages.section.options', compact('rol', 'card', 'ingresos', 'ordenes_detalle'));
     }
 
     /**
@@ -47,7 +74,7 @@ class RolController extends Controller
      * @param  \App\Models\Rol  $rol
      * @return \Illuminate\Http\Response
      */
-    public function show(Rol $rol)
+    public function showCard(Rol $rol)
     {
         $estadoOrden = Orden::class;
         $card = [
@@ -62,8 +89,8 @@ class RolController extends Controller
                     2 => 'ORDENES EN ESPERA',
                 ];
                 $card['data'] = [
-                    1 => $estadoOrden::where(['estado' => 2])->count(),
-                    2 => $estadoOrden::where(['estado' => 1])->count(),
+                    1 => $estadoOrden::where(['estado' => "En proceso"])->count(),
+                    2 => $estadoOrden::where(['estado' => "Pendiente"])->count(),
                 ];
                 $card['img'] = [
                     1 => 'https://firebasestorage.googleapis.com/v0/b/pmkfc-52178.appspot.com/o/entrega-rapida.png?alt=media&token=d4b98dea-eee1-43cc-bd43-9179e016a70b',
@@ -76,8 +103,8 @@ class RolController extends Controller
                     2 => 'ORDENES ENTREGADAS',
                 ];
                 $card['data'] = [
-                    1 => $estadoOrden::where(['estado' => 3])->count(),
-                    2 => $estadoOrden::where(['estado' => 5])->count(),
+                    1 => $estadoOrden::where(['estado' => "Completada"])->count(),
+                    2 => $estadoOrden::where(['estado' => "Entregada"])->count(),
                 ];
                 $card['img'] = [
                     1 => 'https://firebasestorage.googleapis.com/v0/b/pmkfc-52178.appspot.com/o/hora.png?alt=media&token=bb2af20b-0c77-43a1-92f9-84d1b20a6d44',
@@ -91,9 +118,9 @@ class RolController extends Controller
                     3 => 'INGRESOS ESTIMADOS',
                 ];
                 $card['data'] = [
-                    1 => $estadoOrden::where(['estado' => 5])->count(),
-                    2 => $estadoOrden::where(['estado' => 4])->count(),
-                    3 => $estadoOrden::where(['estado' => 5])->sum('totalOrden'),
+                    1 => $estadoOrden::where(['estado' => "Entregada"])->count(),
+                    2 => $estadoOrden::where(['estado' => "Cancelada"])->count(),
+                    3 => $estadoOrden::where(['estado' => "Entregada"])->sum('total'),
                 ];
                 $card['img'] = [
                     1 => 'https://firebasestorage.googleapis.com/v0/b/pmkfc-52178.appspot.com/o/buena-resena.png?alt=media&token=1b2d8957-523a-4d0f-a515-b90892395bfa',
@@ -103,6 +130,33 @@ class RolController extends Controller
                 break;
         }
         return $card;
+    }
+
+    public function showIngresos()
+    {
+        $totalesPorFecha = Orden::select(DB::raw('DATE(created_at) as fecha'), DB::raw('COUNT(*) as cantidad'), DB::raw('SUM(total) as suma_total'))
+            ->where('estado', 'Entregada')
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->get();
+        $filasHTML = '';
+        foreach ($totalesPorFecha as $total) {
+            $fecha = date('d-M-Y', strtotime($total->fecha));
+            $cantidad = $total->cantidad;
+            $sumaTotal = $total->suma_total;
+            $urlPDF = route('generarPDF',$total->fecha);
+
+            $filasHTML .= "<tr>
+                <td>{$fecha}</td>
+                <td>{$cantidad}</td>
+                <td>{$sumaTotal}</td>
+                <td>
+                    <a href='{$urlPDF}'>
+                        <img src='https://firebasestorage.googleapis.com/v0/b/pmkfc-52178.appspot.com/o/imprimir.png?alt=media&token=5ad2f0cd-8ff4-4bda-a167-f7f3230d6992' class='icon icon-shape'>
+                    </a>
+                </td>
+            </tr>";
+        }
+        return $filasHTML;
     }
 
     /**
@@ -126,6 +180,42 @@ class RolController extends Controller
     public function update(Request $request, Rol $rol)
     {
         //
+    }
+    public function updateOrdenEstadoJefe(Request $request)
+    {
+        $ordenId = $request->input('orden_id');
+        $estado = $request->input('estado');
+        $idrol = $request->input('rol');
+
+        $rol = Rol::findOrFail($idrol);
+
+        $orden = Orden::where('id', $ordenId)->first();
+
+        if($estado == 'Pendiente')
+            $orden->estado = 'En Proceso';
+        else if($estado == 'En Proceso')
+            $orden->estado = 'Completada';
+        $orden->save();
+
+        // Redireccionar a la vista o realizar otra acción
+        return redirect()->route('dashboard', ['rol' => $rol]);;
+    }
+
+    public function updateOrdenEstadoCaja(Request $request)
+    {
+        $ordenId = $request->input('ordenid_cj');
+        $boton = $request->input('estadocj');
+        $idrol = $request->input('rolcj');
+
+        $rol = Rol::findOrFail($idrol);
+
+        $orden = Orden::where('id', $ordenId)->first();
+
+        if($boton == 'Completada')
+            $orden->estado = 'Entregada';
+        $orden->save();
+
+        return redirect()->route('dashboard', ['rol' => $rol]);;
     }
 
     /**

@@ -10,7 +10,8 @@ class Orden extends Model
     use HasFactory;
 
     protected $table = 'ordens';
-    protected $fillable = ['estado', 'total', 'mesa_id'];
+
+    protected $fillable = ['estado', 'total', 'mesa_id', 'cliente', 'created_at', 'update_at'];
 
     public function productos()
     {

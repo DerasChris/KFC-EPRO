@@ -45,7 +45,7 @@
     }
 
     #wrap {
-        width: 1100px;
+        flex-wrap: wrap;
         margin: 0 auto;
     }
 
@@ -93,47 +93,109 @@
     }
     </style>
     <div id='wrap'>
-    <div id='calendar'></div>
-    <div style='clear:both'></div>
+        <div id='calendar'></div>
+        <div style='clear:both'></div>
+    </div>
 @endsection
 
 @section('table-jefeCocina')
-    <div class="container my-3 ">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Listado de Pedidos</h5>
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Número de Pedido</th>
-                                <th>Descripción</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Pedido #12345</td>
-                                <td>2x Pizza de Pepperoni, 1x Refresco de Cola</td>
-                                <td>Pendiente</td>
-                                <td>
-                                    <button class="btn btn-warning">En Preparación</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Pedido #54321</td>
-                                <td>1x Hamburguesa con Papas Fritas</td>
-                                <td>En Preparación</td>
-                                <td>
-                                    <button class="btn btn-danger">Listo para Entrega</button>
-                                </td>
-                            </tr>
-                            <!-- Puedes añadir más filas de pedidos aquí -->
-                        </tbody>
-                    </table>
+    <div class="container">
+
+        @foreach($ordenes_detalle->unique('orden_id') as $orden)
+            <form id="formJefeCocina" action="{{ route('updateOrdenJefe.index') }}" method="POST">
+                @csrf
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Orden #{{$orden->orden_id}} | {{ $orden->cliente }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Nombre del Ítem</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio de la Orden</th>
+                                        <th>Estado de la orden</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($ordenes_detalle->where('orden_id', $orden->orden_id) as $detalle)
+                                        <tr>
+                                            <td>{{ $detalle->item_nombre }}</td>
+                                            <td>{{ $detalle->item_cantidad }}</td>
+                                            <td>{{ $detalle->item_precio_orden }}</td>
+                                            <td>{{ $orden->estado_orden }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="hidden" name="orden_id" value="{{ $orden->orden_id }}">
+                        <input type="hidden" name="estado" value="{{ $orden->estado_orden }}">
+                        <input type="hidden" name="rol" value="{{ $rol->idRol }}">
+                        
+                        @if($orden->estado_orden == 'Pendiente')
+                            <button class="btn btn-warning" type="submit" value="{{ $orden->estado_orden }}">Iniciar Preparación</button>
+                        @elseif($orden->estado_orden == 'En Proceso')
+                            <button class="btn btn-danger" type="submit" value="{{ $orden->estado_orden }}">Listo para Entrega</button>
+                        @endif
+                        <p style="display: inline-block; margin-left: 20px;">Estado: {{ $orden->estado_orden }}</p>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </form>
+        @endforeach
+
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@endsection
+
+@section('table-cajero')
+    <div class="container">
+        @foreach($ordenes_detalle->unique('orden_id') as $orden)
+            <form id="formCajero" action="{{ route('updateOrdenCaja.index') }}" method="POST">
+                @csrf
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Orden #{{$orden->orden_id}} | {{ $orden->cliente }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Nombre del Ítem</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio de la Orden</th>
+                                        <th>Estado de la orden</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($ordenes_detalle->where('orden_id', $orden->orden_id) as $detalle)
+                                        <tr>
+                                            <td>{{ $detalle->item_nombre }}</td>
+                                            <td>{{ $detalle->item_cantidad }}</td>
+                                            <td>{{ $detalle->item_precio_orden }}</td>
+                                            <td>{{ $orden->estado_orden }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="hidden" name="ordenid_cj" value="{{ $orden->orden_id }}">
+                        <input type="hidden" name="rolcj" value="{{ $rol->idRol }}">
+                        <input type="hidden" name="estadocj" value="{{$orden->estado_orden}}">
+                        
+                        <button class="btn btn-warning" type="submit" name="Entregada">Orden Entregada</button>
+                    </div>
+                </div>
+            </form>
+        @endforeach
+    </div>
+
 @endsection

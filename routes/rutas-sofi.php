@@ -4,6 +4,7 @@
 use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\RolController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PDFController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,4 +18,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 // RUTA DEL DASHBOARD
-Route::get('/dashboard/{id}', [RolController::class, 'index']);
+Route::get('/dashboard/{id}', [RolController::class, 'index'])->name('dashboard');
+$data = [];
+Route::get('/generate-pdf/{fecha}', [PDFController::class, 'generatePDF'])->name('generarPDF');

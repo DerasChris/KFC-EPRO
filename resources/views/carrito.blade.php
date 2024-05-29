@@ -3,6 +3,7 @@
 @section('contenedor')
 <link rel="stylesheet" href="{{ asset('css/carrito.css') }}">
 
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const addToCartButtons = document.querySelectorAll('.add-to-cart');
@@ -36,31 +37,9 @@
         });
 
 
-        removeButton.addEventListener('click', () => {
-    const itemId = item.dataset.itemId;
-    const itemType = item.dataset.itemType;
-
-    // Eliminar el elemento del carrito
-    if (itemType === 'producto') {
-        delete carrito.productos[itemId];
-    } else if (itemType === 'menu') {
-        delete carrito.menus[itemId];
-    }
-
-    // Eliminar el elemento de la interfaz
-    item.remove();
-});
     });
 
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                popup.style.display = 'flex';
-            });
-        });
-
-        addMoreButton.addEventListener('click', () => {
-            popup.style.display = 'none';
-        });
+        
 
         const plusButtons = document.querySelectorAll('.plus');
         const minusButtons = document.querySelectorAll('.minus');
@@ -91,11 +70,7 @@
             cart.style.display = 'block';
         });
 
-        addToOrderButton.addEventListener('click', () => {
-            productDetail.style.display = 'none';
-            cart.style.display = 'block';
-            alert('Producto agregado a la orden');
-        });
+
 
         const cartItems = document.querySelectorAll('.item');
         cartItems.forEach(item => {
@@ -130,11 +105,19 @@
                             <button class="minus">-</button>
                             <span>{{ $detalles['cantidad'] }}</span>
                             <button class="plus">+</button>
-                            <button class="remove">Quitar</button>
+
                         </div>
+                        <form action="{{ route('carrito.eliminarProd', $id) }}" method="POST" class="m-2">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
                      </div>
-             @endforeach
-            @endif
+                     
+                
+                    @endforeach
+                   
+             @endif
 
             @if (!empty($carrito['menus']))
             <h3>Menús</h3>
@@ -152,61 +135,55 @@
             <button class="plus">+</button>
             
         </div>
-        <button class="remove">Quitar</button>
+        <form action="{{ route('carrito.eliminarMenu', $id) }}" method="POST" class="m-2">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
     </div>
 @endforeach
          @endif
 
-         <div class="total">
-            <h3>Total: ${{ number_format(isset($carrito['total']) ? $carrito['total'] : 0, 2) }}</h3>
-        </div>
+        @if (!empty($carrito['productos']) || !empty($carrito['menus']) )
+            <div class="total">
+                <h3>Total: ${{ number_format(isset($carrito['total']) ? $carrito['total'] : 0, 2) }}</h3>
+            </div>
 
-         <form action="{{ route('carrito.confirmar') }}" method="POST">
-            @csrf
-            <button type="submit" class="add-to-cart">Confirmar Orden</button>
-        </form>
+            <form action="{{ route('carrito.confirmar') }}" method="POST">
+                @csrf
+                <button type="submit" class="add-to-cart">Confirmar Orden</button>
+            </form>
+        @else
+                    <div class="container d-flex justify-content-center align-items-center flex-column">
+                        <h2> No hay ordenes aún</h2>
+                        <img src="{{ asset('images/sanders.png')}}" alt="" width="350" class="rounded-circle mt-5">
+                    </div>
+        
+        @endif
                
         </div>
 
-        <div class="popup">
-            <div class="popup-content">
-                <span class="checkmark">✔</span>
-                <h2>Producto añadido!</h2>
-                <p>Orden asignada correctamente</p>
-                <button class="add-more">Añadir más productos</button>
+        @if(!empty(session()->get('success')))
+            <div class="popup">
+                <div class="popup-content">
+                    <span class="checkmark">✔</span>
+                    <h2>Orden confirmada!</h2>
+                    <p>Orden asignada correctamente</p>
+                    <button class="add-more">Añadir más productos</button>
+                </div>
             </div>
-        </div>
+        @endif
 
-        <!-- Detalle del Producto -->
-        <!-- <div class="product-detail">
-            <header>
-                <button class="back">&larr;</button>
-                <h1>Wow Combo</h1>
-                <p>4.9 • 26 mins</p>
-            </header>
-          
-            <p>Delicioso combo de pollo con papas y soda a lo coronel Sanders</p>
-            <div class="combo-details">
-                <div class="combo-item">
-                    <img src="pollo.jpg" alt="Piernas">
-                    <button class="change">Cambiar</button>
-                </div>
-                <div class="combo-item">
-                    <img src="papas.jpg" alt="Papas Fritas">
-                    <button class="change">Cambiar</button>
-                </div>
-                <div class="combo-item">
-                    <img src="pepsi.jpg" alt="Pepsi 375 ML">
-                    <button class="change">Cambiar</button>
+        @if(!empty(session()->get('Deleted')))
+            <div class="popup">
+                <div class="popup-content">
+                    <span class="checkmark">✔</span>
+                    <h2>Item eliminado!</h2>
+                    <p>Puedes seleccionar otro producto</p>
+                    <button class="add-more">Añadir más productos</button>
                 </div>
             </div>
-            <div class="order-quantity">
-                <button class="minus">-</button>
-                <span>1</span>
-                <button class="plus">+</button>
-            </div>
-            <button class="add-to-order">$13.99 Agregar a Orden</button>
-        </div> -->
+        @endif
     </div>
 @endsection
 
