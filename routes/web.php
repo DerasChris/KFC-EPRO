@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolController;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Jetstream\Rules\Role;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,14 +26,14 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+
 Route::middleware([
-   'auth:sanctum',
+    'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
     Route::get('/dashboard', function () {
         $user = Auth::user();
-        
 
         if ($user) {
             // Verificar si el rol existe y es un número
@@ -59,6 +60,7 @@ Route::middleware([
 
     Route::get('/dashboard/{id}', [RolController::class, 'index'])->name('d-role');
 });
+
 
 Route::get('/cliente/productos/individuales', [ProductosController::class, 'index'])->name('prodsIndividuales');
 Route::get('/cliente/productos/combos', [MenuController::class, 'index'])->name('prodsCombos');

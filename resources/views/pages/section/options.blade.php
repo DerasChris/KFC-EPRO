@@ -189,22 +189,13 @@
                     <div class="card-footer">
                         <input type="hidden" name="ordenid_cj" value="{{ $orden->orden_id }}">
                         <input type="hidden" name="rolcj" value="{{ $rol->idRol }}">
-                        <input type="hidden" name="estadocj" value="">
+                        <input type="hidden" name="estadocj" value="{{$orden->estado_orden}}">
                         
                         <button class="btn btn-warning" type="submit" name="Entregada">Orden Entregada</button>
-                        <button class="btn btn-danger" type="submit" name="NoRetirado">No Retirado</button>
                     </div>
                 </div>
             </form>
         @endforeach
     </div>
-    <script>
-        $('button[name="Entregada"]').click(function(){
-            $('input[name="estadocj"]').val('Entregada');
-        })
 
-        $('button[name="NoRetirado"]').click(function(){
-            $('input[name="estadocj"]').val('NoRetirado');  
-        })
-    </script>
 @endsection

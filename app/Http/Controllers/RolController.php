@@ -211,10 +211,8 @@ class RolController extends Controller
 
         $orden = Orden::where('id', $ordenId)->first();
 
-        if($boton == 'Entregada')
+        if($boton == 'Completada')
             $orden->estado = 'Entregada';
-        else if($boton == 'NoRetirado')
-            $orden->estado = 'No Retirado';
         $orden->save();
 
         return redirect()->route('dashboard', ['rol' => $rol]);;
